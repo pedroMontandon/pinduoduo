@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
@@ -9,7 +8,6 @@ import { SharedEventsModule } from './shared/events/shared-events.module';
 
 @Module({
   imports: [
-    EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',

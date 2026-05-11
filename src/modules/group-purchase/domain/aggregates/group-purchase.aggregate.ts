@@ -218,6 +218,7 @@ export class GroupPurchase {
     this._domainEvents.push(
       new GroupPurchaseExpiredEvent({
         aggregateId: this.id,
+        productId: this.productId,
         participantCount: this.getActiveParticipantCount(),
         minimumRequired: this.minimumParticipants,
       }),

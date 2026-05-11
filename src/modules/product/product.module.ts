@@ -5,9 +5,12 @@ import { GetProductUseCase } from './application/use-cases/get-product/get-produ
 import { ListProductsUseCase } from './application/use-cases/list-products/list-products.use-case';
 import { UpdateProductUseCase } from './application/use-cases/update-product/update-product.use-case';
 import { DeleteProductUseCase } from './application/use-cases/delete-product/delete-product.use-case';
+import { ReserveProductStockUseCase } from './application/use-cases/reserve-product-stock/reserve-product-stock.use-case';
+import { ReleaseProductStockUseCase } from './application/use-cases/release-product-stock/release-product-stock.use-case';
 import { PRODUCT_REPOSITORY } from './domain/repositories/product.repository';
 import { ProductTypeOrmEntity } from './infrastructure/persistence/product.typeorm-entity';
 import { ProductTypeOrmRepository } from './infrastructure/persistence/product.typeorm-repository';
+import { ProductEventConsumer } from './infrastructure/messaging/product-event.consumer';
 import { ProductController } from './presentation/controllers/product.controller';
 
 @Module({
@@ -19,6 +22,9 @@ import { ProductController } from './presentation/controllers/product.controller
     ListProductsUseCase,
     UpdateProductUseCase,
     DeleteProductUseCase,
+    ReserveProductStockUseCase,
+    ReleaseProductStockUseCase,
+    ProductEventConsumer,
     { provide: PRODUCT_REPOSITORY, useClass: ProductTypeOrmRepository },
   ],
 })
