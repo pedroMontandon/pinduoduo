@@ -61,10 +61,31 @@ export class Product {
     return new Product(props);
   }
 
-  decreaseStock(quantity: number): void {
+  decreaseStock(quantity: number): Product {
     if (quantity > this.stock) {
       throw new Error('Insufficient stock');
     }
+    return Product.reconstitute({
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      price: this.price,
+      stock: this.stock - quantity,
+      createdAt: this.createdAt,
+      updatedAt: new Date(),
+    });
+  }
+
+  increaseStock(quantity: number): Product {
+    return Product.reconstitute({
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      price: this.price,
+      stock: this.stock + quantity,
+      createdAt: this.createdAt,
+      updatedAt: new Date(),
+    });
   }
 
   updatePrice(newPrice: Price): Product {
