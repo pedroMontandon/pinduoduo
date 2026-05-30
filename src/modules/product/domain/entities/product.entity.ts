@@ -1,5 +1,7 @@
 import { randomUUID } from 'crypto';
+import { DomainEvent } from '../../../../shared/events/domain-event.base';
 import { Price } from '../value-objects/price.vo';
+import { ProductCreatedEvent } from '../events/product-created.event';
 
 export class Product {
   readonly id: string;
@@ -9,6 +11,16 @@ export class Product {
   readonly stock: number;
   readonly createdAt: Date;
   readonly updatedAt: Date;
+
+  private _domainEvents: DomainEvent[] = [];
+
+  getDomainEvents(): DomainEvent[] {
+    return [...this._domainEvents];
+  }
+
+  clearDomainEvents(): void {
+    this._domainEvents = [];
+  }
 
   private constructor(props: {
     id: string;
@@ -38,7 +50,7 @@ export class Product {
     stock: number;
   }): Product {
     const now = new Date();
-    return new Product({
+    const product = new Product({
       id: randomUUID(),
       name: props.name,
       description: props.description,
@@ -47,6 +59,15 @@ export class Product {
       createdAt: now,
       updatedAt: now,
     });
+    product._domainEvents.push(
+      new ProductCreatedEvent({
+        aggregateId: product.id,
+        name: product.name,
+        price: product.price.amount,
+        stock: product.stock,
+      }),
+    );
+    return product;
   }
 
   static reconstitute(props: {
