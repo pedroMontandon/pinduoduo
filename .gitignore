@@ -1,6 +1,9 @@
+logs/*
+!logs/.gitkeep
 node_modules
 dist/
 .env
 *.js.map
 coverage/
 Opere
+package-lock.json

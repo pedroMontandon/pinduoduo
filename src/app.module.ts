@@ -5,9 +5,11 @@ import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
 import { GroupPurchaseModule } from './modules/group-purchase/group-purchase.module';
 import { SharedEventsModule } from './shared/events/shared-events.module';
+import { ObservabilityModule } from './shared/observability/observability.module';
 
 @Module({
   imports: [
+    ObservabilityModule,
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
