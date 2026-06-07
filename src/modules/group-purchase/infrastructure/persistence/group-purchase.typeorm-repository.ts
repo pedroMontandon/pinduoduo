@@ -35,12 +35,12 @@ export class GroupPurchaseTypeOrmRepository implements GroupPurchaseRepository {
   }
 
   async findByProductId(
-    productId: string,
+    productId?: string,
     skip = 0,
     take = 10,
   ): Promise<{ items: GroupPurchase[]; total: number }> {
     const [entities, total] = await this.groupRepo.findAndCount({
-      where: { productId },
+      where: productId ? { productId } : {},
       relations: ['participants'],
       order: { createdAt: 'DESC' },
       skip,

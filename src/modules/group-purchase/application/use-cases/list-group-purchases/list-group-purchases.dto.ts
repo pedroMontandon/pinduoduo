@@ -2,8 +2,9 @@ import { IsUUID, IsOptional, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class ListGroupPurchasesDto {
+  @IsOptional()
   @IsUUID()
-  productId: string;
+  productId?: string;
 
   @IsOptional()
   @Type(() => Number)
