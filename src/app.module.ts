@@ -20,6 +20,7 @@ import { ObservabilityModule } from './shared/observability/observability.module
       database: process.env.DB_NAME ?? 'pinduoduo',
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
+      extra: { max: 20 },
     }),
     SharedEventsModule,
     UserModule,

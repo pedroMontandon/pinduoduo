@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../../../../shared/auth/jwt-auth.guard';
 import { CreateProductUseCase } from '../../application/use-cases/create-product/create-product.use-case';
 import { CreateProductDto } from '../../application/use-cases/create-product/create-product.dto';
 import { GetProductUseCase } from '../../application/use-cases/get-product/get-product.use-case';
@@ -25,12 +26,14 @@ export class ProductController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   list(@Query() dto: ListProductsDto) {
     return this.listProducts.execute(dto);
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   get(@Param('id') id: string) {
     return this.getProduct.execute(id);

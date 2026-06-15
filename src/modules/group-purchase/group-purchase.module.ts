@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from '../user/user.module';
 import { CreateGroupPurchaseUseCase } from './application/use-cases/create-group-purchase/create-group-purchase.use-case';
 import { GetGroupPurchaseUseCase } from './application/use-cases/get-group-purchase/get-group-purchase.use-case';
 import { JoinGroupPurchaseUseCase } from './application/use-cases/join-group-purchase/join-group-purchase.use-case';
@@ -16,6 +17,7 @@ import { GroupPurchaseController } from './presentation/controllers/group-purcha
 @Module({
   imports: [
     TypeOrmModule.forFeature([GroupPurchaseTypeOrmEntity, GroupPurchaseParticipantTypeOrmEntity]),
+    UserModule,
   ],
   controllers: [GroupPurchaseController],
   providers: [

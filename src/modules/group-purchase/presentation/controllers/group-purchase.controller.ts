@@ -27,11 +27,13 @@ export class GroupPurchaseController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   list(@Query() dto: ListGroupPurchasesDto) {
     return this.listGroupPurchases.execute(dto);
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   get(@Param('id') id: string) {
     return this.getGroupPurchase.execute(id);
   }

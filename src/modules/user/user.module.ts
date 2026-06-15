@@ -30,6 +30,6 @@ import { UserController } from './presentation/controllers/user.controller';
     UserEventConsumer,
     { provide: USER_REPOSITORY, useClass: UserTypeOrmRepository },
   ],
-  exports: [JwtModule, PassportModule],
+  exports: [JwtModule, PassportModule, USER_REPOSITORY],
 })
 export class UserModule {}
