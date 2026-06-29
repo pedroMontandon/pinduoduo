@@ -8,6 +8,7 @@ import '../../features/auth/presentation/register_page.dart';
 import '../../features/group_purchases/presentation/gp_create_page.dart';
 import '../../features/group_purchases/presentation/gp_detail_page.dart';
 import '../../features/group_purchases/presentation/gp_list_page.dart';
+import '../../features/notifications/presentation/notifications_page.dart';
 import '../../features/products/presentation/product_detail_page.dart';
 import '../../features/products/presentation/product_form_page.dart';
 import '../../features/products/presentation/product_list_page.dart';
@@ -52,6 +53,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/products/:id',
         builder: (_, s) =>
             ProductDetailPage(productId: s.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (_, __) => const NotificationsPage(),
       ),
       GoRoute(
         path: '/group-purchases',

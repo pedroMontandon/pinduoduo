@@ -1,14 +1,15 @@
 import 'dart:convert';
 
-/// Authenticated session: the raw JWT plus the user id decoded from it.
+/// Authenticated session: the raw JWT plus the user id and email decoded from it.
 class AuthState {
-  const AuthState({required this.token, required this.userId});
+  const AuthState({required this.token, required this.userId, this.email});
 
   final String token;
   final String? userId;
+  final String? email;
 
-  /// Decodes the `sub` claim (user id) from a JWT without extra packages.
-  static String? decodeUserId(String token) {
+  /// Decodes the JWT payload (claims) without extra packages.
+  static Map<String, dynamic>? decodePayload(String token) {
     try {
       final parts = token.split('.');
       if (parts.length != 3) return null;
@@ -21,14 +22,23 @@ class AuthState {
           payload += '=';
           break;
       }
-      final map = jsonDecode(utf8.decode(base64.decode(payload)))
+      return jsonDecode(utf8.decode(base64.decode(payload)))
           as Map<String, dynamic>;
-      return map['sub'] as String?;
     } catch (_) {
       return null;
     }
   }
 
-  factory AuthState.fromToken(String token) =>
-      AuthState(token: token, userId: decodeUserId(token));
+  /// Decodes the `sub` claim (user id) from a JWT.
+  static String? decodeUserId(String token) =>
+      decodePayload(token)?['sub'] as String?;
+
+  factory AuthState.fromToken(String token) {
+    final claims = decodePayload(token);
+    return AuthState(
+      token: token,
+      userId: claims?['sub'] as String?,
+      email: claims?['email'] as String?,
+    );
+  }
 }

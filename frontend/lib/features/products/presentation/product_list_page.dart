@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../shared/format.dart';
 import '../../../shared/widgets/async_value_widget.dart';
 import '../../auth/application/auth_controller.dart';
+import '../../notifications/application/notifications_providers.dart';
 import '../application/products_providers.dart';
 import '../domain/product.dart';
 
@@ -41,25 +42,37 @@ class _ProductListPageState extends ConsumerState<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(productListProvider);
-    final loggedIn = ref.watch(authControllerProvider).valueOrNull != null;
+    final auth = ref.watch(authControllerProvider).valueOrNull;
+    final loggedIn = auth != null;
+    final unread = ref.watch(unreadCountProvider).valueOrNull ?? 0;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
         actions: [
           IconButton(
+            tooltip: 'Notificações',
+            icon: Badge.count(
+              count: unread,
+              isLabelVisible: unread > 0,
+              child: const Icon(Icons.notifications_outlined),
+            ),
+            onPressed: () => context.go('/notifications'),
+          ),
+          IconButton(
             tooltip: 'Group purchases',
             icon: const Icon(Icons.groups),
             onPressed: () => context.go('/group-purchases'),
           ),
-          if (loggedIn)
+          if (loggedIn) ...[
+            _UserBadge(email: auth.email),
             IconButton(
               tooltip: 'Sign out',
               icon: const Icon(Icons.logout),
               onPressed: () =>
                   ref.read(authControllerProvider.notifier).logout(),
-            )
-          else
+            ),
+          ] else
             IconButton(
               tooltip: 'Sign in',
               icon: const Icon(Icons.login),
@@ -165,6 +178,43 @@ class _ProductCard extends StatelessWidget {
               ),
               const Icon(Icons.chevron_right),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// App-bar badge showing who is currently logged in (email from the JWT).
+class _UserBadge extends StatelessWidget {
+  const _UserBadge({required this.email});
+  final String? email;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final label = (email == null || email!.isEmpty) ? 'Signed in' : email!;
+    final initial = label[0].toUpperCase();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      child: Tooltip(
+        message: 'Logged in as $label',
+        child: Chip(
+          visualDensity: VisualDensity.compact,
+          avatar: CircleAvatar(
+            backgroundColor: theme.colorScheme.primary,
+            child: Text(
+              initial,
+              style: TextStyle(
+                color: theme.colorScheme.onPrimary,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          label: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 160),
+            child: Text(label, overflow: TextOverflow.ellipsis),
           ),
         ),
       ),

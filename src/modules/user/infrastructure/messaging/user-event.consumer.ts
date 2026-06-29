@@ -17,7 +17,7 @@ export class UserEventConsumer {
   })
   async handleGroupPurchaseConfirmed(event: GroupPurchaseConfirmedEvent): Promise<void> {
     this.logger.log(`Group purchase confirmed event received for ${event.aggregateId}`);
-    this.notifyGroupConfirmed.execute(
+    await this.notifyGroupConfirmed.execute(
       event.aggregateId,
       event.participantIds,
       event.discountPercentage,
